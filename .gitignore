@@ -5,8 +5,8 @@ __pycache__
 
 *.idea/*
 
-*.frontend/debug.log
-*.frontend/node_modules/*
+frontend/debug.log
+frontend/node_modules/*
 # OS generated files #
 ######################
 .DS_Store
