@@ -3,7 +3,7 @@ __pycache__
 *.venv
 *.trivia-venv
 
-*.idea/*
+.idea/*
 
 frontend/debug.log
 frontend/node_modules/*
