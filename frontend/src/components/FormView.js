@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 
 import '../stylesheets/FormView.css';
+import getBackendURI from '../config';
 
 class FormView extends Component {
   constructor(props){
@@ -17,7 +18,7 @@ class FormView extends Component {
 
   componentDidMount(){
     $.ajax({
-      url: `/categories`, //TODO: update request URL
+      url: `${getBackendURI()}/api/categories`, //Done: update request URL
       type: "GET",
       success: (result) => {
         this.setState({ categories: result.categories })
@@ -34,7 +35,7 @@ class FormView extends Component {
   submitQuestion = (event) => {
     event.preventDefault();
     $.ajax({
-      url: '/questions', //TODO: update request URL
+      url: `${getBackendURI()}/api/question`, //Done: update request URL
       type: "POST",
       dataType: 'json',
       contentType: 'application/json',
