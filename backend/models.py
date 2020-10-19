@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 database_name = "trivia"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
+database_path = "postgresql://postgres:{}@{}/{}".format('post','localhost:5432', database_name)
 
 db = SQLAlchemy()
 
@@ -76,3 +76,11 @@ class Category(db.Model):
       'id': self.id,
       'type': self.type
     }
+
+  @classmethod
+  def get_dict(cls, categories: list):
+    data = {}
+    for category in categories:
+      category_dict = category.format()
+      data.update({category_dict['id']: category_dict['type']})
+    return data

@@ -1,7 +1,12 @@
 .vscode
 __pycache__
-venv
+*.venv
+*.trivia-venv
 
+.idea/*
+
+frontend/debug.log
+frontend/node_modules/*
 # OS generated files #
 ######################
 .DS_Store
