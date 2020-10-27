@@ -79,7 +79,8 @@ def create_app(test_config=None):
       question = Question.query.filter_by(id = id).first()
       if question is not None:
          question.delete()
-      return jsonify({'success': True}), 200
+         return jsonify({'success': True}), 200
+      return jsonify({'success': False}), 400
 
 
   '''
@@ -115,8 +116,6 @@ def create_app(test_config=None):
   def search_question():
       req_data = request.get_json()
       search_term = req_data.get('searchTerm', '')
-      print("Search term.....")
-      print(search_term)
       questions = [question.format() for question in Question.query.filter(Question.question.ilike(f'%{search_term}%')).limit(QUESTIONS_PER_PAGE)]
       data = {
           'questions': questions,
@@ -160,6 +159,21 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
+
+  @app.route('/api/quizzes', methods=['POST'])
+  def play_quiz():
+      from sqlalchemy.sql import func
+      req_data = request.get_json()
+      previous_questions = req_data.get('previous_questions', [])
+      quiz_category = req_data.get('quiz_category', {'id': 0})
+      predicate = (~Question.id.in_(list(map(lambda x: x, previous_questions))))
+      if quiz_category['id'] != 0:
+          predicate &= (Question.category == quiz_category['id'])
+      question = Question.query.order_by(func.random()).filter(predicate).first()
+      if question is None:
+          return jsonify({'question': {}}), 400
+      return jsonify({'question': question.format()}), 200
+
 
   '''
   @Done: 
