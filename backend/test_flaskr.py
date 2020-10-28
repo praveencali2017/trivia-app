@@ -128,6 +128,68 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 500, msg= "test_api_add_question_failure")
 
 
+    def test_api_categories_questions_success(self):
+        category, question = build_dummy_category_question()
+        response = self.client().get(f"/api/categories/{category.id}/questions")
+        res_data = response.get_json()
+        expected_data = {
+            'questions': [question.format()],
+            'totalQuestions': 1,
+            'currentCategory': '1'
+        }
+        expected_data.update({'categories': {'1': 'Test'}})
+        self.assertEqual(expected_data, res_data, msg= 'test_api_categories_questions_success')
+
+
+    def test_api_categories_questions_failure(self):
+        _, question = build_dummy_category_question()
+        # category id 2 is not present, so everything should be empty
+        response = self.client().get(f"/api/categories/{2}/questions")
+        res_data = response.get_json()
+        expected_data = {
+            'questions': [],
+            'totalQuestions': 0,
+            'currentCategory': '2'
+        }
+        expected_data.update({'categories': {}})
+        self.assertEqual(expected_data, res_data, msg= 'test_api_categories_questions_failure')
+
+    def test_api_quizzes_success(self):
+        category, question = build_dummy_category_question()
+        expected_data = {
+            'question': question.format()
+        }
+        req_data = {
+            'previous_questions': [],
+            'quiz_category': {'id': 0}
+        }
+        response = self.client().post('/api/quizzes', json = req_data)
+        res_data = response.get_json()
+        self.assertEqual(expected_data, res_data, msg= "test_api_quizzes_success")
+
+    def test_api_quizzes_with_prev_success(self):
+        category, question = build_dummy_category_question()
+        category_1, question_1 = build_dummy_category_question()
+        expected_data = {
+            'question': question_1.format()
+        }
+        req_data = {
+            'previous_questions': [question.id],
+            'quiz_category': {'id': 0}
+        }
+        response = self.client().post('/api/quizzes', json = req_data)
+        res_data = response.get_json()
+        self.assertEqual(expected_data, res_data, msg= "test_api_quizzes_with_prev_success")
+
+def build_dummy_category_question():
+    category = Category("Test")
+    category.insert()
+    question = Question("How many paintings did Van Gogh sell in his lifetime?", "One", category.id, 4)
+    question.insert()
+    return category, question
+
+
+
 
 # Make the tests conveniently executable
 if __name__ == "__main__":

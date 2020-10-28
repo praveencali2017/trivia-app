@@ -149,7 +149,7 @@ def create_app(test_config=None):
 
 
   '''
-  @TODO: 
+  @Done: 
   Create a POST endpoint to get questions to play the quiz. 
   This endpoint should take category and previous question parameters 
   and return a random questions within the given category, 
@@ -171,7 +171,7 @@ def create_app(test_config=None):
           predicate &= (Question.category == quiz_category['id'])
       question = Question.query.order_by(func.random()).filter(predicate).first()
       if question is None:
-          return jsonify({'question': {}}), 400
+          return jsonify({'question': {}, 'message': 'No more questions or cannot load questions of the given category'}), 400
       return jsonify({'question': question.format()}), 200
 
 
