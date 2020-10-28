@@ -148,9 +148,6 @@ def create_app(test_config=None):
             'totalQuestions': len(questions),
             'currentCategory': id
         }
-        categories = Category.query.filter_by(id=id).all()
-        categories_dict = Category.get_dict(categories)
-        data.update({'categories': categories_dict})
         return jsonify(data), 200
 
     '''

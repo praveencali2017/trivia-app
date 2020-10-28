@@ -76,7 +76,7 @@ GET ...
 POST ...
 DELETE ...
 
-GET '/categories'
+GET '/api/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
@@ -87,6 +87,50 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
+GET '/api/questions'
+- Fetches list of questions, under the given category
+- Request Arguments: ?page = 1&category = 1
+- Returns: An object with list of questions (list), total number of questions, current category and all categories (dict) 
+{'questions': questions,
+'totalQuestions': len(questions),
+'currentCategory': category,
+'categories: {'id': 'category_name'}}
+
+DELETE '/api/questions/<id>'
+- Deletes the specific question based on the given id
+- Request Arguments: None
+- Returns: An object that sends status of the delete, based on whether the delete operation has been performed or not 
+{'success': True/False}
+
+POST '/api/question'
+- Adds a new question to the selected category along with the difficulty level
+- Request Arguments: {'question': 'what is the name ?', 'answer': 'xxxxxxx', 'difficulty': 4, 'category': 1}
+- Returns: A status object if success 
+{'success': True}
+
+POST '/api/questions'
+- Fetches all the questions that contains the given search term
+- Request Arguments: {'searchTerm': 'mind'}
+- Returns: An object that contains key: value pairs of list of questions and total number of questions with currentCategory as null
+{'questions': [questions],
+'totalQuestions': 4,
+'currentCategory': None}
+
+GET '/api/categories/<id>/questions'
+- Fetches questions based on the given catergory id <id>
+- Request Arguments: None
+- Returns: An object with list of questions under the given category, also sends total questions and category id
+{
+'questions': [questions],
+'totalQuestions': 4,
+'currentCategory': 3
+}
+
+POST `/api/quizzes`
+- Fetches random question from the given category, if category is not selected picks random from all categories
+- Request Arguments: {'previous_questions': [1, 2, 3], 'quiz_category':{'id': 0}}
+- Returns: A random question object if found
+{'question': question.format()} (question.format() returns dict of question database object model) 
 ```
 
 
